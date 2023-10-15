@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<!-- Created By CodingNepal -->
+<html lang="en" dir="ltr">
+
+<head>
+   <meta charset="utf-8">
+   <title>ipl Login and Registration</title>
+   <link rel="stylesheet" href="style.css">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+   <div class="wrapper">
+      <div class="title-text">
+         <div class="title login">
+            Login
+         </div>
+         <div class="title signup">
+            Signup
+         </div>
+      </div>
+      <div class="form-container">
+         <div class="slide-controls">
+            <input type="radio" name="slide" id="login" checked>
+            <input type="radio" name="slide" id="signup">
+            <label for="login" class="slide login">Login</label>
+            <label for="signup" class="slide signup">Signup</label>
+            <div class="slider-tab"></div>
+         </div>
+         <div class="form-inner">
+            <form action="#" class="login" onsubmit="handleLogin(event)">
+               <div class="field">
+                  <input type="text" placeholder="Email Address" required>
+               </div>
+               <div class="field">
+                  <input type="password" placeholder="Password" required>
+               </div>
+               <div class="pass-link">
+                  <a href="#">Forgot password?</a>
+               </div>
+               <div class="field btn">
+                  <div class="btn-layer"></div>
+                  <input type="submit" value="Login">
+               </div>
+               <div class="signup-link">
+                  Not a member? <a href="">Signup now</a>
+               </div>
+            </form>
+            <form action="#" class="signup" onsubmit="handleSignup(event)">
+               <div class="field">
+                  <input type="text" placeholder="Email Address" required>
+               </div>
+               <div class="field">
+                  <input type="password" placeholder="Password" required>
+               </div>
+               <div class="field">
+                  <input id="cp" type="password" placeholder="Confirm password" required>
+               </div>
+               <div class="field btn">
+                  <div class="btn-layer"></div>
+                  <input type="submit" value="Signup">
+               </div>
+            </form>
+         </div>
+      </div>
+   </div>
+   <script>
+      // Existing script for form sliding
+      const loginText = document.querySelector(".title-text .login");
+      const loginForm = document.querySelector("form.login");
+      const loginBtn = document.querySelector("label.login");
+      const signupBtn = document.querySelector("label.signup");
+      const signupLink = document.querySelector("form .signup-link a");
+      signupBtn.onclick = (() => {
+         loginForm.style.marginLeft = "-50%";
+         loginText.style.marginLeft = "-50%";
+      });
+      loginBtn.onclick = (() => {
+         loginForm.style.marginLeft = "0%";
+         loginText.style.marginLeft = "0%";
+      });
+      signupLink.onclick = (() => {
+         signupBtn.click();
+         return false;
+      });
+
+      // New script for handling login and signup using localStorage
+      function handleLogin(event) {
+         event.preventDefault();
+         const email = document.querySelector('.login input[type="text"]').value;
+         const password = document.querySelector('.login input[type="password"]').value;
+
+         // Retrieve the stored data
+         const storedData = localStorage.getItem(email);
+
+         // Check if stored data is null or doesn't match
+         if (!storedData || JSON.parse(storedData).password !== password) {
+            alert('Invalid credentials!');
+            return;
+         }
+
+         alert('You are logged in!');
+         window.location.href = 'main.html';
+
+         const currentUser = {
+            email: email,
+            // ... any other data you want to store for the session
+         };
+
+         // Store the current user data in localStorage
+         localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+         // Here you can redirect the user to another page or clear the form
+      }
+
+      function handleSignup(event) {
+         event.preventDefault();
+         const email = document.querySelector('.signup input[type="text"]').value;
+         const password = document.querySelector('.signup input[type="password"]').value;
+         const confirmPassword = document.getElementById('cp').value;
+
+         if (password !== confirmPassword) {
+            alert('Passwords do not match!');
+            return;
+         }
+
+         // Check if the user already exists
+         if (localStorage.getItem(email)) {
+            alert('User already exists!');
+            return;
+         }
+         console.log("button clicked")
+         // Store data
+         localStorage.setItem(email, JSON.stringify({ password }));
+         alert('Account created successfully!');
+         // Here you can redirect the user or clear the form
+      }
+   </script>
+</body>
+
+</html>
